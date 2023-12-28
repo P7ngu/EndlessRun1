@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem explosionParticles;
     public ParticleSystem dirtParticles;
 
+    public AudioClip jumpSound;
+    public AudioClip crashSound;
+
+    private AudioSource playerAudio;
    
 
     // Start is called before the first frame update
@@ -31,6 +35,8 @@ public class PlayerController : MonoBehaviour
         //This makes the player jump, and then fall because of gravity ^
 
         Physics.gravity *= gravityModifier;
+
+        playerAudio = GetComponent<AudioSource>();
         
     }
 
@@ -41,6 +47,7 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
+            playerAudio.PlayOneShot(jumpSound, 1.0f);
             playerAnimator.SetTrigger("Jump_trig");
             dirtParticles.Stop();
         }
@@ -57,6 +64,7 @@ public class PlayerController : MonoBehaviour
             playerAnimator.SetBool("Death_b", true);
             playerAnimator.SetInteger("DeathType_int", 1);
             explosionParticles.Play();
+            playerAudio.PlayOneShot(crashSound, 1.0f);
             dirtParticles.Stop();
         }
     }
